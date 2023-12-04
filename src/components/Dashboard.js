@@ -1,8 +1,21 @@
 import React, { useEffect, useState } from 'react'
+import requestApi from '../helpers/api';
 
 const Dashboard = () => {
 
     const [dashboardData, setDashboardData] = useState({});
+
+    useEffect(() => {
+        requestApi('/users', 'GET', []).then(response => {
+            console.log(response);
+            setDashboardData({
+                ...dashboardData,
+                totalUser: response.data.total
+            })
+        }).catch(err => {
+            console.log(err);
+        })
+    }, [])
 
     return (
         <div id="layoutSidenav_content">
