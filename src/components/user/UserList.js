@@ -10,6 +10,8 @@ const UserList = () => {
     const [users, setUsers] = useState([]);
     const [numOfPage, setNumOfPage] = useState(1);
     const [currentPage, setCurrentPage] = useState(1);
+    const [itemPerPage, setItemPerPage] = useState(1);
+    const [searchSring, setSearchSring] = useState('');
 
     const columns = [
         {
@@ -45,23 +47,22 @@ const UserList = () => {
                 </>
             )
         }
-    ]
-
-
+    ];
 
     useEffect(() => {
         dispatch(actions.controlLoading(true));
-        requestApi('/users', 'GET', []).then((res) => {
+        let query = `?item_per_page=${ itemPerPage }&page=${ currentPage }&search=${ searchSring }`;
+        requestApi(`/users${ query }`, 'GET', []).then((res) => {
             console.log(res);
             setUsers(res.data.data)
             setCurrentPage(res.data.currentPage);
-            setNumOfPage(res.data.total);
+            setNumOfPage(res.data.lastPage);
             dispatch(actions.controlLoading(false));
         }).catch((err) => {
             dispatch(actions.controlLoading(false));
             console.log(err);
         })
-    }, []);
+    }, [currentPage, itemPerPage, searchSring]);
     return (
         <div id="layoutSidenav_content">
             <main>
@@ -77,6 +78,9 @@ const UserList = () => {
                         columns={columns}
                         numOfPage={numOfPage}
                         currentPage={currentPage}
+                        onPageChange={setCurrentPage}
+                        onChangeItemPerPage={setItemPerPage}
+                        onKeySearch={(keyword) => { setSearchSring(keyword) }}
                     />
 
                 </div>
