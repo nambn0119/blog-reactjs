@@ -1,16 +1,50 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import LiveSearch from './LiveSearch';
 
 const DataTable = (props) => {
-  const { name, data, columns, numOfPage, currentPage, onPageChange, onChangeItemPerPage, onKeySearch } = props;
+  const { name, data, columns, numOfPage, currentPage, onPageChange, onChangeItemPerPage, onKeySearch, onSelectedRows } = props;
+  const [selectedRows, setSelectedRows] = useState([]);
   const renderHeader = () => {
     return columns.map((col, index) => <th key={index} scope="col">{col.name}</th>)
+  }
+
+  useEffect(() => {
+    console.log(selectedRows);
+    onSelectedRows(selectedRows)
+  }, [selectedRows])
+
+  const onClickCheckbox = (e) => {
+    let checked = e.target.checked;
+    let value = e.target.value;
+    if (checked) {
+      if (!selectedRows.includes(value)) {
+        setSelectedRows([
+          ...selectedRows,
+          value
+        ]);
+      }
+    } else {
+      let index = selectedRows.indexOf(value);
+      const temp = [...selectedRows];
+      temp.splice(index, 1);
+      setSelectedRows(temp);
+    }
+  }
+
+  const onSelectAll = (e) => {
+    if (e.target.checked) {
+      const temp = data.map(ele => String(ele.id));
+      setSelectedRows(temp);
+    } else {
+      setSelectedRows([]);
+    }
   }
 
   const renderData = () => {
     return (
       data.map((item, index) => (
         <tr key={index}>
+          <td><input type="checkbox" checked={selectedRows.includes(String(item.id)) ? true : false} className='form-check-input' value={item.id} onChange={onClickCheckbox} /></td>
           {
             columns.map((col, ind) => (
               <td key={ind}>{col.element(item)}</td>
@@ -83,6 +117,7 @@ const DataTable = (props) => {
       <table className="table table-striped table-hover">
         <thead>
           <tr>
+            <td><input onChange={onSelectAll} checked={selectedRows.length === data.length && data.length > 0 ? true : false} type="checkbox" className='form-check-input' /></td>
             {renderHeader()}
           </tr>
         </thead>
@@ -91,6 +126,7 @@ const DataTable = (props) => {
         </tbody>
         <tfoot>
           <tr>
+            <td></td>
             {renderHeader()}
           </tr>
         </tfoot>

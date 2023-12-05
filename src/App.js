@@ -10,6 +10,7 @@ import Layout from './layouts/Layout';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import UserList from './components/user/UserList';
+import UserAdd from './components/user/UserAdd';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route element={<PrivateRoutes />}>
             <Route path='/' element={<Dashboard />}></Route>
             <Route path='/users' element={<UserList />}></Route>
+            <Route path='/user/add' element={<UserAdd />}></Route>
           </Route>
         </Route>
         <Route element={<PublicRoutes />}>
