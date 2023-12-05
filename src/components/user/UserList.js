@@ -4,8 +4,10 @@ import { useDispatch } from 'react-redux'
 import * as actions from '../../redux/actions'
 import { Button, Modal } from 'react-bootstrap'
 import DataTable from '../common/DataTable';
-import { toast } from 'react-toastify'
+import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom'
+import moment from 'moment'
+import { formatDateTime } from '../../helpers/common'
 
 
 const UserList = () => {
@@ -41,17 +43,17 @@ const UserList = () => {
         },
         {
             name: "Created at",
-            element: row => row.created_at
+            element: row => formatDateTime(row.created_at)
         },
         {
             name: "Updated at",
-            element: row => row.updated_at
+            element: row => formatDateTime(row.updated_at)
         },
         {
             name: "Actions",
             element: row => (
                 <>
-                    <button type="button" className="btn btn-sm btn-warning me-1"><i className="fa fa-pencil"></i> Edit</button>
+                    <Link to={`/user/edit/${ row.id }`} className="btn btn-sm btn-warning me-1"><i className="fa fa-pencil"></i> Edit</Link>
                     <button type="button" className="btn btn-sm btn-danger me-1" onClick={() => handleDelete(row.id)}><i className="fa fa-trash"></i> Delete</button>
                 </>
             )
@@ -119,8 +121,11 @@ const UserList = () => {
                 <div className="container-fluid px-4">
                     <h1 className="mt-4">Tables</h1>
                     <ol className="breadcrumb mb-4">
+                        <li className="breadcrumb-item"><Link to={'/'}>Dashboard</Link></li>
+                        <li className="breadcrumb-item"><Link to={'/users'}>Users</Link></li>
+                        {/* <li className="breadcrumb-item active">Add new</li>
                         <li className="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-                        <li className="breadcrumb-item active">Tables</li>
+                        <li className="breadcrumb-item active">Tables</li> */}
                     </ol>
                     <div className="mb-3">
                         <Link to={'/user/add'} className='btn btn-sm btn-success me-2'><i className='fa fa-plus'></i>Add new</Link>

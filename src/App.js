@@ -11,6 +11,10 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import UserList from './components/user/UserList';
 import UserAdd from './components/user/UserAdd';
+import UserUpdate from './components/user/UserUpdate';
+import PageNotFound from './components/PageNotFound';
+import Profile from './layouts/Profile';
+import PostList from './components/post/PostList';
 
 function App() {
   return (
@@ -21,6 +25,9 @@ function App() {
             <Route path='/' element={<Dashboard />}></Route>
             <Route path='/users' element={<UserList />}></Route>
             <Route path='/user/add' element={<UserAdd />}></Route>
+            <Route path='/user/edit/:id' element={<UserUpdate />}></Route>
+            <Route path='/profile' element={<Profile />}></Route>
+            <Route path='/posts' element={<PostList />}></Route>
           </Route>
         </Route>
         <Route element={<PublicRoutes />}>
@@ -28,6 +35,7 @@ function App() {
           <Route path='/register' element={<Register />}></Route>
         </Route>
       </Route>
+      <Route path='*' element={<PageNotFound />}></Route>
     </Routes>
   );
 }
